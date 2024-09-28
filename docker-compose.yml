@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  upload-service:
+    build:
+      context: ./upload-service
+    ports:
+      - "5001:5001"
+    depends_on:
+      - auth-service
+      - file-system-service
+      - mysql-db
+
+  stream-service:
+    build:
+      context: ./stream-service
+    ports:
+      - "5002:5002"
+    depends_on:
+      - auth-service
+      - file-system-service
+      - mysql-db
+
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "5003:5003"
+
+  file-system-service:
+    build:
+      context: ./file-system-service
+    ports:
+      - "5004:5004"
+
+  mysql-db:
+    build:
+      context: ./mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: video_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+
